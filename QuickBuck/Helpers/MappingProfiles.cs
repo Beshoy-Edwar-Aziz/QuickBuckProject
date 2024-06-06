@@ -18,6 +18,7 @@ namespace QuickBuck.Helpers
             CreateMap<JobProvider, JobProviderToReturnDTO>()
                 .ForMember(d => d.Logo, o => o.MapFrom<ResolveImageJobProvider>());
             CreateMap<JobPost, JobPostToReturnDTO>();
+            CreateMap<JobApplication, JobApplicationToReturnDTO>();
         }
     }
 }
