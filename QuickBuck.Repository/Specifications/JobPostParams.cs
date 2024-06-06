@@ -2,6 +2,7 @@
 {
     public class JobPostParams
     {
+        public int? Id { get; set; }
         public int PageIndex { get; set; } = 1;
         private int PageSize = 5;
         public int pageSize

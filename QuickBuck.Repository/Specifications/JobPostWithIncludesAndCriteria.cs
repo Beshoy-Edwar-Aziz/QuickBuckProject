@@ -26,6 +26,6 @@ namespace QuickBuck.Repository.Specifications
             Includes.Add(JP=>JP.RequiredSkills);
             Includes.Add(JP=>JP.Requirements);
         }
-
+        
     }
 }

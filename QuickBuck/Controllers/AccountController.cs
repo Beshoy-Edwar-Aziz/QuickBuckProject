@@ -5,7 +5,9 @@ using QuickBuck.Core.Models;
 using QuickBuck.Core.Repositories;
 using QuickBuck.DTOs;
 using QuickBuck.Errors;
+using QuickBuck.Helpers;
 using System.Data;
+using System.Text;
 using System.Text.Json;
 
 namespace QuickBuck.Controllers
@@ -35,9 +37,10 @@ namespace QuickBuck.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO Model)
         {
-            if (Model is not null)
+            var EmailExist = await _userManager.FindByEmailAsync(Model.Email);
+
+            if (Model is not null&&EmailExist is null)
             {
-             
                 var User = new AppUser()
                 {
                     Email = Model.Email,
@@ -59,7 +62,9 @@ namespace QuickBuck.Controllers
                         await _roleManager.CreateAsync(Role);
                     }
                     await _userManager.CreateAsync(User,Model.Password);
-                    
+                    var x = Model.JobProvider.Logo.Split(',')[1];
+                    var Photo = Convert.FromBase64String(x);
+                    var result = DocumentSettings.UploadFile(Photo,"image","photos");
                     var JobProvider=new JobProvider()
                     {
                         CompanyName= Model.JobProvider.CompanyName,
@@ -68,7 +73,7 @@ namespace QuickBuck.Controllers
                         CompanySize = Model.JobProvider.CompanySize,
                         Description = Model.JobProvider.Description,
                         WebSite = Model.JobProvider.WebSite,
-                        Logo = Model.JobProvider.Logo,
+                        Logo = result,
                         NoOfEmployees = Model.JobProvider.NoOfEmployees,
                         AppUser = User
                     };
@@ -98,12 +103,15 @@ namespace QuickBuck.Controllers
                     {
                         Balance = 0
                     };
+                   var x= Model.JobSeeker.Photo.Split(',')[1];
+                    var Photo = Convert.FromBase64String(x);
+                    var result=DocumentSettings.UploadFile(Photo,"image","photos");
                     var JobSeeker = new JobSeeker()
                     {
                         BirthDate = Model.JobSeeker.BirthDate,
                         College = Model.JobSeeker.College,
                         CurrentYear = Model.JobSeeker.CurrentYear,
-                        Photo = Model.JobSeeker.Photo,
+                        Photo = result,
                         Skills = Model.JobSeeker.Skills,
                         Status = Model.JobSeeker.Status,
                         University = Model.JobSeeker.University,

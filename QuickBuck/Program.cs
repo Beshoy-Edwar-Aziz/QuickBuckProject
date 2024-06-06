@@ -5,6 +5,7 @@ using QuickBuck.Extensions;
 using QuickBuck.Helpers;
 using QuickBuck.Repository;
 using QuickBuck.Repository.Data;
+using System.Text.Json.Serialization;
 
 namespace QuickBuck
 {
@@ -33,6 +34,11 @@ namespace QuickBuck
                             .AllowAnyHeader();
                 });
             });
+            builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
             var app = builder.Build();
             #region UpdateDatabase
             using var Scope = app.Services.CreateScope();

@@ -18,5 +18,6 @@ namespace QuickBuck.DTOs
         public Address Address { get; set; } 
         public JobProviderDTO? JobProvider { get; set; }
         public JobSeekerDTO? JobSeeker { get; set; }
+        
     }
 }

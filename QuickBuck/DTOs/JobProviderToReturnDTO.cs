@@ -1,6 +1,6 @@
 ﻿namespace QuickBuck.DTOs
 {
-    public class JobProviderDTO
+    public class JobProviderToReturnDTO
     {
         public int Id { get; set; }
         public string CompanyName { get; set; }

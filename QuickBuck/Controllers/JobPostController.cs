@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QuickBuck.Core.Models;
@@ -17,23 +18,26 @@ namespace QuickBuck.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IGenericRepository<JobProvider> _providerRepo;
         private readonly IGenericRepository<JobPost> _jobPostRepo;
+        private readonly IMapper _mapper;
 
-        public JobPostController(UserManager<AppUser> userManager,IGenericRepository<JobProvider> providerRepo, IGenericRepository<JobPost> jobPostRepo)
+        public JobPostController(UserManager<AppUser> userManager,IGenericRepository<JobProvider> providerRepo, IGenericRepository<JobPost> jobPostRepo,IMapper mapper)
         {
             _userManager = userManager;
             _providerRepo = providerRepo;
             _jobPostRepo = jobPostRepo;
+            _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<JobPost>> GetAllJobPosts([FromQuery] JobPostParams Params)
+        public async Task<ActionResult<JobPostToReturnDTO>> GetAllJobPosts([FromQuery] JobPostParams Params)
         {
             var Spec = new JobPostWithIncludesAndCriteria();
             var JobPost = await _jobPostRepo.GetAllWithSpecAsync(Spec);
-            var Pagination = new Pagination<JobPost>()
+            var MappedJobPost = _mapper.Map<IReadOnlyList<JobPost>, IReadOnlyList<JobPostToReturnDTO>>(JobPost); 
+            var Pagination = new Pagination<JobPostToReturnDTO>()
             {
                 PageIndex = Params.PageIndex,
                 PageSize = Params.pageSize,
-                Data = JobPost
+                Data = MappedJobPost
             };
             return Ok(Pagination);
         }

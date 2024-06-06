@@ -28,7 +28,7 @@ namespace QuickBuck.Service
             {
                 
                 new Claim(JwtRegisteredClaimNames.Email,User.Email),
-                new Claim(JwtRegisteredClaimNames.Name,User.UserName),
+                new Claim(JwtRegisteredClaimNames.Name,User.UserName)
                 
             };
             var Roles=await userManager.GetRolesAsync(User);
