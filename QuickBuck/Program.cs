@@ -29,11 +29,14 @@ namespace QuickBuck
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("https://localhost:7156")
-                            .AllowAnyOrigin()
-                            .AllowAnyHeader();
+                    policy
+                            .AllowAnyHeader()
+                            .AllowCredentials()
+                            .AllowAnyMethod()
+                            .WithOrigins("http://localhost:4200");
                 });
             });
+            builder.Services.AddSignalR();
             builder.Services.AddControllers()
         .AddJsonOptions(options =>
         {
@@ -67,11 +70,16 @@ namespace QuickBuck
             app.UseStaticFiles();
             app.UseCors();
             app.UseAuthentication();
+            app.UseRouting();
             app.UseAuthorization();
 
 
-            app.MapControllers();
-
+            app.UseEndpoints((endpoints) =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
+            });
+            //app.MapControllers();
             app.Run();
         }
     }

@@ -11,7 +11,8 @@ namespace QuickBuck.Repository.Specifications
 {
     public class JobPostWithIncludesAndCriteria:BaseSpecification<JobPost>
     {
-        public JobPostWithIncludesAndCriteria() 
+        public JobPostWithIncludesAndCriteria(int id):base(P=>
+        (id==0)||(P.Id==id)) 
         {
             Includes.Add(JP=>JP.jobProvider);
             Includes.Add(JP => JP.JobApplications);

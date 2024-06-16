@@ -21,5 +21,24 @@
             return FileName;
 
         } 
+        public static void DeleteFile(string FileName,string FolderName, string FileType)
+        {
+            string FolderPath="";
+            string FilePath="";
+            if (FileType=="image")
+            {
+                 FolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", FolderName);
+                 FilePath= Path.Combine(FolderPath,FileName);
+            }
+            else if (FileType=="document")
+            {
+                FolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", FolderName);
+                FilePath = Path.Combine(FolderPath,FileName);
+            }
+            if (File.Exists(FilePath))
+            {
+                File.Delete(FilePath);
+            }
+        } 
     }
 }

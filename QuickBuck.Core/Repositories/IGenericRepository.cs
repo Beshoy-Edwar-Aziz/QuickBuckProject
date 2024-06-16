@@ -14,5 +14,6 @@ namespace QuickBuck.Core.Repositories
         public Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> Spec);
         public Task<T> GetWithSpecByIdAsync(ISpecification<T> Spec);
         public Task<int> Add(T Item);
+        public Task Update(T Item);
     }
 }

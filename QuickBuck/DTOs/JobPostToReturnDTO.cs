@@ -14,13 +14,13 @@ namespace QuickBuck.DTOs
         public string Location { get; set; }
         public decimal SalaryRangeFrom { get; set; }
         public decimal SalaryRangeTo { get; set; }
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.Now.Date;
         public int Applicants { get; set; }
         public int Viewed { get; set; }
         public int InConsideration { get; set; }
         public string Content { get; set; }
         public JobProviderToReturnDTO jobProvider { get; set; }
         public ICollection<Bookmark> Bookmarks { get; set; } = new HashSet<Bookmark>();
-        public ICollection<JobApplication> JobApplications { get; set; } = new HashSet<JobApplication>();
+        public ICollection<JobApplicationToReturnDTO> JobApplications { get; set; } = new HashSet<JobApplicationToReturnDTO>();
     }
 }

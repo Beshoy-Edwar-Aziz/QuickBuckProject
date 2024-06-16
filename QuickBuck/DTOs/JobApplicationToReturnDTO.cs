@@ -11,6 +11,7 @@ namespace QuickBuck.DTOs
         public int JobPostId { get; set; }
         public int JobSeekerId { get; set; }
         public int JobProviderId { get; set; }
+        public string? JobSeekerName { get; set; }
       
     }
 }

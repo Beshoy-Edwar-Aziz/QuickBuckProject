@@ -16,9 +16,12 @@ namespace QuickBuck.Helpers
                 .ForMember(d=>d.WalletBalance,o=>o.MapFrom(s=>s.Wallet.Balance))
                 .ForMember(d=>d.Address,o=>o.MapFrom(s=>s.AppUser.Address));
             CreateMap<JobProvider, JobProviderToReturnDTO>()
-                .ForMember(d => d.Logo, o => o.MapFrom<ResolveImageJobProvider>());
+                .ForMember(d => d.Logo, o => o.MapFrom<ResolveImageJobProvider>()).ReverseMap();
             CreateMap<JobPost, JobPostToReturnDTO>();
-            CreateMap<JobApplication, JobApplicationToReturnDTO>();
+            CreateMap<JobApplication, JobApplicationToReturnDTO>()
+                .ForMember(d=>d.JobSeekerName,o=>o.MapFrom(JA => JA.JobSeeker.AppUser.UserName))
+                .ForMember(d=>d.CV,o=>o.MapFrom<ResolveFiles>());
+            CreateMap<Messages, MessageToReturnDTO>();
         }
     }
 }

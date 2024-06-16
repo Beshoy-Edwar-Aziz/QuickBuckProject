@@ -18,7 +18,9 @@ namespace QuickBuck.Repository.Data.Configurations
                 M.Id,
                 M.JobProviderId,
                 M.JobSeekerId
-            });  
+            });
+           
+            
         }
     }
 }

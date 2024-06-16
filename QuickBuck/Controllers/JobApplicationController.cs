@@ -39,15 +39,17 @@ namespace QuickBuck.Controllers
             {
                 Id = JobPostId,
             };
-            var SpecJobPost = new JobPostWithIncludesAndCriteria(Params);
+            var SpecJobPost = new JobPostWithIncludesAndCriteria(JobPostId);
             var JobProvider = await _providerRepo.GetWithSpecByIdAsync(Spec);
             var JobSeeker = await _seekerRepo.GetWithSpecByIdAsync(SpecJobSeeker);
             var JobPost = await _postRepo.GetWithSpecByIdAsync(SpecJobPost);
             if (Model is not null&&JobProviderId!=0&&JobSeekerId!=0&&JobPostId!=0)
             {
-                var DecodeBase64 = Convert.FromBase64String(Model.CV);
+                var decodeSplit = Model.CV.Split(',')[1];
+                var DecodeBase64 = Convert.FromBase64String(decodeSplit);
                 var FileName =DocumentSettings.UploadFile(DecodeBase64,"document","Files");
-                var DecodeCoverLetterBase64 = Convert.FromBase64String(Model.CoverLetter);
+                var decodeSplitCover = Model.CoverLetter.Split(',')[1];
+                var DecodeCoverLetterBase64 = Convert.FromBase64String(decodeSplitCover);
                 var Cover = DocumentSettings.UploadFile(DecodeCoverLetterBase64,"document","Files");
                 var JobApplication = new JobApplication()
                 {
@@ -65,11 +67,13 @@ namespace QuickBuck.Controllers
                 var jobs = await appRepo.GetAllWithAsync();
                 bool state = true;
                 int Result = 0;
+                int JobAppId = 0;
                 foreach (var j in jobs)
                 {
-                    if (j.JobSeekerId == JobSeekerId)
+                    if (j.JobSeekerId == JobSeekerId&&j.JobPostId==JobPostId)
                     {
                         state = false;
+                        JobAppId = j.Id;
                         if (state==false)
                         {
                             break;
@@ -83,7 +87,24 @@ namespace QuickBuck.Controllers
                 }
                 else
                 {
-                    return BadRequest(new ApiResponse(400,"JobSeeker Created A JobApplication Before"));
+                    var spec = new JobApplicationWithCriteriaAndIncludes(JobAppId);
+                    var job =await _jobAppRepo.GetWithSpecByIdAsync(spec);
+                    DocumentSettings.DeleteFile(job.CV,"Files","document");
+                    DocumentSettings.DeleteFile(job.CoverLetter, "Files", "document");
+                    job.JobSeeker = JobSeeker;
+                    job.JobPost = JobPost;
+                    job.ApplicationDate = Model.ApplicationDate;
+                    job.Status= Model.Status;
+                    job.CV = FileName;
+                    job.CoverLetter = Cover;
+                    job.JobPostId = JobPostId;
+                    job.JobSeekerId=JobSeekerId;
+                    job.JobProviderId = JobProviderId;
+                    
+                    await _jobAppRepo.Update(job);
+                    var mapped=_mapper.Map<JobApplication, JobApplicationToReturnDTO>(job);
+
+                    return Ok(mapped);
                 }
                 var ReturnData = new JobApplicationToReturnDTO()
                 {
@@ -103,9 +124,33 @@ namespace QuickBuck.Controllers
             }
         }
         [HttpGet]
-        public async Task<ActionResult<JobApplicationToReturnDTO>> GetJobApplication([FromQuery]int Id)
+        public async Task<ActionResult<JobApplicationToReturnDTO>> GetJobApplicationById([FromQuery]int Id)
+        {
+            var Spec = new JobApplicationWithCriteriaAndIncludes(Id);
+            var Result =await _jobAppRepo.GetWithSpecByIdAsync(Spec);
+            if (Result is not null)
+            {
+                var MappedJobApp = _mapper.Map<JobApplication, JobApplicationToReturnDTO>(Result);
+                return Ok(MappedJobApp);
+            }
+            return BadRequest(new ApiResponse(400));
+        }
+        [HttpPut]
+        public async Task<ActionResult<JobPost>> AttachJobApplicationWithJobPost([FromQuery] int JobPostId)
         {
             
+            var Spec = new JobPostWithIncludesAndCriteria(JobPostId);
+            var JobPost=await _postRepo.GetWithSpecByIdAsync(Spec);
+            var SpecJobApp = new JobApplicationWithCriteriaAndIncludes(null,JobPostId);
+            var JobApplications = await _jobAppRepo.GetAllWithSpecAsync(SpecJobApp);
+            JobPost.JobApplications = (ICollection<JobApplication>)JobApplications;
+            JobPost.Applicants = JobApplications.Count();
+            await _postRepo.Update(JobPost);
+            
+            var MappedJob=_mapper.Map<JobPost,JobPostToReturnDTO>(JobPost);
+            var MappedApps = _mapper.Map<IReadOnlyList<JobApplication>, IReadOnlyList<JobApplicationToReturnDTO>>(JobApplications);
+            MappedJob.JobApplications = (ICollection<JobApplicationToReturnDTO>)MappedApps;
+            return Ok(MappedJob);
         }
         
     }

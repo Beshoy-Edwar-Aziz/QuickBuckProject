@@ -48,6 +48,13 @@ namespace QuickBuck.Repository
         {
             return await GetSpec(Spec).FirstOrDefaultAsync();
         }
+
+        public async Task Update(T Item)
+        {
+            _dbContext.Update(Item);
+           await _dbContext.SaveChangesAsync();
+        }
+
         private IQueryable<T> GetSpec(ISpecification<T> Spec)
         {
            return SpecificationEvaluator<T>.SpecBuilder(_dbContext.Set<T>(), Spec);

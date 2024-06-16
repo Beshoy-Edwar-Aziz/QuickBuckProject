@@ -20,7 +20,7 @@ namespace QuickBuck.Controllers
         private readonly IGenericRepository<JobPost> _jobPostRepo;
         private readonly IMapper _mapper;
 
-        public JobPostController(UserManager<AppUser> userManager,IGenericRepository<JobProvider> providerRepo, IGenericRepository<JobPost> jobPostRepo,IMapper mapper)
+        public JobPostController(UserManager<AppUser> userManager, IGenericRepository<JobProvider> providerRepo, IGenericRepository<JobPost> jobPostRepo, IMapper mapper)
         {
             _userManager = userManager;
             _providerRepo = providerRepo;
@@ -30,9 +30,9 @@ namespace QuickBuck.Controllers
         [HttpGet]
         public async Task<ActionResult<JobPostToReturnDTO>> GetAllJobPosts([FromQuery] JobPostParams Params)
         {
-            var Spec = new JobPostWithIncludesAndCriteria();
+            var Spec = new JobPostWithIncludesAndCriteria(Params);
             var JobPost = await _jobPostRepo.GetAllWithSpecAsync(Spec);
-            var MappedJobPost = _mapper.Map<IReadOnlyList<JobPost>, IReadOnlyList<JobPostToReturnDTO>>(JobPost); 
+            var MappedJobPost = _mapper.Map<IReadOnlyList<JobPost>, IReadOnlyList<JobPostToReturnDTO>>(JobPost);
             var Pagination = new Pagination<JobPostToReturnDTO>()
             {
                 PageIndex = Params.PageIndex,
@@ -41,6 +41,15 @@ namespace QuickBuck.Controllers
             };
             return Ok(Pagination);
         }
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<JobPostToReturnDTO>> GetJobPostById( int Id)
+        {
+            var Spec = new JobPostWithIncludesAndCriteria(Id);
+            var JobPost = await _jobPostRepo.GetWithSpecByIdAsync(Spec);
+            var MappedJobPost = _mapper.Map<JobPost, JobPostToReturnDTO>(JobPost);
+            return Ok(MappedJobPost);
+        }
+        
         [HttpPost("{jobPosterId}")]
         public async Task<ActionResult<JobPost>> CreateJobPost(JobPostDTO jobPostDTO,[FromRoute] int jobPosterId)
         {

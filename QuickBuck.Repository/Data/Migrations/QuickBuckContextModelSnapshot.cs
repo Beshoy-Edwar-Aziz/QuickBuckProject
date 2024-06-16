@@ -181,7 +181,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address", (string)null);
+                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.AppUser", b =>
@@ -278,7 +278,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("JobPostId");
 
-                    b.ToTable("Bookmarks", (string)null);
+                    b.ToTable("Bookmarks");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.JobApplication", b =>
@@ -321,7 +321,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("JobSeekerId");
 
-                    b.ToTable("JobApplications", (string)null);
+                    b.ToTable("JobApplications");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.JobPost", b =>
@@ -381,7 +381,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("jobProviderId");
 
-                    b.ToTable("JobPosts", (string)null);
+                    b.ToTable("JobPosts");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.JobProvider", b =>
@@ -427,7 +427,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("JobProviders", (string)null);
+                    b.ToTable("JobProviders");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.JobSeeker", b =>
@@ -471,7 +471,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("JobSeekers", (string)null);
+                    b.ToTable("JobSeekers");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.Messages", b =>
@@ -492,13 +492,17 @@ namespace QuickBuck.Repository.Data.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id", "JobProviderId", "JobSeekerId");
 
                     b.HasIndex("JobProviderId");
 
                     b.HasIndex("JobSeekerId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.Notification", b =>
@@ -534,7 +538,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("JobSeekerId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.RequiredSkills", b =>
@@ -556,7 +560,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("JobPostId");
 
-                    b.ToTable("RequiredSkills", (string)null);
+                    b.ToTable("RequiredSkills");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.Requirements", b =>
@@ -582,7 +586,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("JobPostId");
 
-                    b.ToTable("Requirements", (string)null);
+                    b.ToTable("Requirements");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.Skills", b =>
@@ -604,7 +608,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("JobSeekerId");
 
-                    b.ToTable("Skills", (string)null);
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.Transactions", b =>
@@ -634,7 +638,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("QuickBuck.Core.Models.Wallet", b =>
@@ -650,7 +654,7 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Wallets", (string)null);
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
