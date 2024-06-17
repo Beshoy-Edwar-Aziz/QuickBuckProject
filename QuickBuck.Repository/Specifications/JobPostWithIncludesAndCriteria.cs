@@ -27,6 +27,16 @@ namespace QuickBuck.Repository.Specifications
             Includes.Add(JP=>JP.RequiredSkills);
             Includes.Add(JP=>JP.Requirements);
         }
-        
+        public JobPostWithIncludesAndCriteria(int jobProvider,string CompanyName):base(P=>
+        P.jobProvider.Id==jobProvider)
+        {
+            ApplyOrderByDesc(p => p.Date);
+            ApplyPagination(0,4);
+            Includes.Add(JP => JP.jobProvider);
+            Includes.Add(JP => JP.JobApplications);
+            Includes.Add(JP => JP.RequiredSkills);
+            Includes.Add(JP => JP.Requirements);
+        }
+
     }
 }

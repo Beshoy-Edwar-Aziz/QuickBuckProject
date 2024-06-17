@@ -49,7 +49,14 @@ namespace QuickBuck.Controllers
             var MappedJobPost = _mapper.Map<JobPost, JobPostToReturnDTO>(JobPost);
             return Ok(MappedJobPost);
         }
-        
+        [HttpGet("GetLatestJobPosts")]
+        public async Task<ActionResult<JobPostToReturnDTO>> GetLatestJobPosts([FromQuery] int JobProviderId)
+        {
+            var Spec = new JobPostWithIncludesAndCriteria(JobProviderId,"");
+            var JobPost = await _jobPostRepo.GetAllWithSpecAsync(Spec);
+            var MappedJobPost = _mapper.Map<IReadOnlyList<JobPost>, IReadOnlyList<JobPostToReturnDTO>>(JobPost);
+            return Ok(MappedJobPost);
+        }
         [HttpPost("{jobPosterId}")]
         public async Task<ActionResult<JobPost>> CreateJobPost(JobPostDTO jobPostDTO,[FromRoute] int jobPosterId)
         {
