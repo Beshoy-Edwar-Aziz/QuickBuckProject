@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuickBuck.Repository.Data;
 
@@ -11,9 +12,10 @@ using QuickBuck.Repository.Data;
 namespace QuickBuck.Repository.Data.Migrations
 {
     [DbContext(typeof(QuickBuckContext))]
-    partial class QuickBuckContextModelSnapshot : ModelSnapshot
+    [Migration("20240617153930_CreateIdColumnOnBookMarkTable")]
+    partial class CreateIdColumnOnBookMarkTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,24 +266,22 @@ namespace QuickBuck.Repository.Data.Migrations
 
             modelBuilder.Entity("QuickBuck.Core.Models.Bookmark", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<int>("JobSeekerId")
                         .HasColumnType("int");
 
                     b.Property<int>("JobPostId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id", "JobSeekerId", "JobPostId");
+                    b.HasKey("JobSeekerId", "JobPostId");
 
                     b.HasIndex("JobPostId");
-
-                    b.HasIndex("JobSeekerId");
 
                     b.ToTable("Bookmarks");
                 });

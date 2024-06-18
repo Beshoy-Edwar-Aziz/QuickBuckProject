@@ -12,6 +12,8 @@ namespace QuickBuck.Repository.Specifications
     {
         public JobProviderWithIncludesAndCriteria()
         {
+            ApplyOrderByDesc(P=>P.NoOfEmployees);
+            ApplyPagination(0,5);
             Includes.Add(P=>P.AppUser);
             Includes.Add(P=>P.Messages);
             Includes.Add(P=>P.JobApplications);

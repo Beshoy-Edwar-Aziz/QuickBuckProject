@@ -16,6 +16,8 @@ namespace QuickBuck.Repository.Specifications
             Includes.Add(J=>J.AppUser.Address);
             Includes.Add(J=>J.Wallet);
             Includes.Add(J=>J.JobApplications);
+            Includes.Add(J => J.Skills);
+
         }
         public JobSeekerSpecWithIncludeAndCriteria(int id):base(J=>J.Id==id)
         {
@@ -23,6 +25,8 @@ namespace QuickBuck.Repository.Specifications
             Includes.Add(J => J.AppUser.Address);
             Includes.Add(J => J.Wallet);
             Includes.Add(J => J.JobApplications);
+            Includes.Add(J => J.Skills);
+
         }
         public JobSeekerSpecWithIncludeAndCriteria(string UserName):base(J=>J.AppUser.UserName==UserName)
         {
@@ -30,6 +34,7 @@ namespace QuickBuck.Repository.Specifications
             Includes.Add(J => J.AppUser.Address);
             Includes.Add(J => J.Wallet);
             Includes.Add(J => J.JobApplications);
+            Includes.Add(J=>J.Skills);
         }
     }
 }

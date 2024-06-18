@@ -4,6 +4,8 @@
     {
         public int? Id { get; set; }
         public int? JobProviderId { get; set; }
+        public string? JobName { get; set; } = string.Empty;
+        public string? Sort { get; set; }
         public int PageIndex { get; set; } = 1;
         private int PageSize = 5;
         public int pageSize

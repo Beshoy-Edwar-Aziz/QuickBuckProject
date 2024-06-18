@@ -1,4 +1,6 @@
-﻿namespace QuickBuck.DTOs
+﻿using QuickBuck.Core.Models;
+
+namespace QuickBuck.DTOs
 {
     public class JobProviderToReturnDTO
     {
@@ -12,5 +14,7 @@
         public string? WebSite { get; set; }
         public string? Logo { get; set; }
         public string? Description { get; set; }
+        public ICollection<Messages> Messages { get; set; } = new HashSet<Messages>();
+
     }
 }

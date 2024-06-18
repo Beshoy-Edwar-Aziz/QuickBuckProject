@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuickBuck.Core.Models
 {
-    public class Bookmark
+    public class Bookmark:BaseEntity
     {
         public int JobSeekerId { get; set; }
         public int JobPostId { get; set; }

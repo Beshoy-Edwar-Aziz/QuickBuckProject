@@ -15,6 +15,7 @@ namespace QuickBuck.Repository.Data.Configurations
         {
             builder.HasKey(B => new
             {
+                B.Id,
                 B.JobSeekerId,
                 B.JobPostId
             });

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuickBuck.Repository.Data;
 
@@ -11,9 +12,10 @@ using QuickBuck.Repository.Data;
 namespace QuickBuck.Repository.Data.Migrations
 {
     [DbContext(typeof(QuickBuckContext))]
-    partial class QuickBuckContextModelSnapshot : ModelSnapshot
+    [Migration("20240617154606_bookmark")]
+    partial class bookmark
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
