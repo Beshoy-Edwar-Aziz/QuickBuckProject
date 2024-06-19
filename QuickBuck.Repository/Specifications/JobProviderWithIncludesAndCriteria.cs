@@ -19,6 +19,7 @@ namespace QuickBuck.Repository.Specifications
             Includes.Add(P=>P.JobApplications);
             Includes.Add(P=>P.Transactions);
             Includes.Add(P=>P.Notifications);
+            Includes.Add(p => p.Wallet);
         }
         public JobProviderWithIncludesAndCriteria(int? Id, string? UserName):base(P=>
         (Id==0)||(P.Id==Id)
@@ -31,6 +32,8 @@ namespace QuickBuck.Repository.Specifications
             Includes.Add(P => P.JobApplications);
             Includes.Add(P => P.Transactions);
             Includes.Add(P => P.Notifications);
+            Includes.Add(p => p.Wallet);
+
         }
     }
 }

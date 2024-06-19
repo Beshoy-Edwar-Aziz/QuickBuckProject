@@ -62,6 +62,11 @@ namespace QuickBuck.Controllers
                         await _roleManager.CreateAsync(Role);
                     }
                     await _userManager.CreateAsync(User,Model.Password);
+                    var Wallet = new Wallet()
+                    {
+                        Balance = 0
+                    };
+                   
                     var x = Model.JobProvider.Logo.Split(',')[1];
                     var Photo = Convert.FromBase64String(x);
                     var result = DocumentSettings.UploadFile(Photo,"image","photos");
@@ -75,7 +80,8 @@ namespace QuickBuck.Controllers
                         WebSite = Model.JobProvider.WebSite,
                         Logo = result,
                         NoOfEmployees = Model.JobProvider.NoOfEmployees,
-                        AppUser = User
+                        AppUser = User,
+                        Wallet = Wallet,
                     };
                     await _jobProviderRepo.Add(JobProvider);
                     await _userManager.AddToRoleAsync(User, Model.Role);

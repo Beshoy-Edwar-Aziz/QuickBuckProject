@@ -13,7 +13,6 @@ namespace QuickBuck.Helpers
                 .ForMember(d=>d.UserFName,O=>O.MapFrom(s=>s.AppUser.FirstName))
                 .ForMember(d=>d.UserLName,o=>o.MapFrom(s=>s.AppUser.LastName))
                 .ForMember(d=>d.UserName,o=>o.MapFrom(s=>s.AppUser.UserName))
-                .ForMember(d=>d.WalletBalance,o=>o.MapFrom(s=>s.Wallet.Balance))
                 .ForMember(d=>d.Address,o=>o.MapFrom(s=>s.AppUser.Address));
             CreateMap<JobProvider, JobProviderToReturnDTO>()
                 .ForMember(d => d.Logo, o => o.MapFrom<ResolveImageJobProvider>()).ReverseMap();

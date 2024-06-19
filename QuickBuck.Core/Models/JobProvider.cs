@@ -18,6 +18,8 @@ namespace QuickBuck.Core.Models
         public string? WebSite { get; set; }
         public string? Logo { get; set; }
         public string? Description { get; set; }
+        public Wallet Wallet { get; set; }
+        public int WalletId { get; set; }
         public ICollection<Notification> Notifications { get; set; } = new HashSet<Notification> ();
         public ICollection<JobApplication> JobApplications { get; set; } = new HashSet<JobApplication>();
         public ICollection<Messages> Messages { get; set; } = new HashSet<Messages>();

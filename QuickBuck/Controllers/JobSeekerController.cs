@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuickBuck.Core.Models;
 using QuickBuck.Core.Repositories;
 using QuickBuck.DTOs;
+using QuickBuck.Helpers;
 using QuickBuck.Repository.Specifications;
 
 namespace QuickBuck.Controllers
@@ -48,6 +49,23 @@ namespace QuickBuck.Controllers
             var Seeker = await _jobSeekerRepo.GetWithSpecByIdAsync(Spec);
             var MappedSeeker = _mapper.Map<JobSeeker, JobSeekerToReturnDTO>(Seeker);
             return Ok(MappedSeeker);
+        }
+        [HttpPut]
+        public async Task<ActionResult<JobSeekerToReturnDTO>> UpdateJobSeekerData (JobSeekerDTO Model)
+        {
+            var Spec = new JobSeekerSpecWithIncludeAndCriteria(Model.Id);
+            var JobSeeker = await _jobSeekerRepo.GetWithSpecByIdAsync (Spec);
+            var x = Model.Photo.Split(',')[1];
+            var Photo = Convert.FromBase64String(x);
+            var result = DocumentSettings.UploadFile(Photo, "image", "photos");
+            JobSeeker.Status = Model.Status;
+            JobSeeker.CurrentYear = Model.CurrentYear;
+            JobSeeker.Photo = result;
+            JobSeeker.Skills = Model.Skills;
+            JobSeeker.University = Model.University;
+            JobSeeker.College = Model.College;
+            await _jobSeekerRepo.Update(JobSeeker);
+            return Ok(Model);
         }
     }
 }

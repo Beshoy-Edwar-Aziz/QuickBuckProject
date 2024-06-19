@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuickBuck.Repository.Data;
 
@@ -11,9 +12,10 @@ using QuickBuck.Repository.Data;
 namespace QuickBuck.Repository.Data.Migrations
 {
     [DbContext(typeof(QuickBuckContext))]
-    partial class QuickBuckContextModelSnapshot : ModelSnapshot
+    [Migration("20240618220332_ok")]
+    partial class ok
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -662,12 +664,6 @@ namespace QuickBuck.Repository.Data.Migrations
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ClientSecret")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentIntentId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

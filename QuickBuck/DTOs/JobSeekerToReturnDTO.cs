@@ -11,7 +11,7 @@ namespace QuickBuck.DTOs
         public Address Address { get; set; }
         public string University { get; set; }
         public string College { get; set; }
-        public int WalletBalance { get; set; }
+        public Wallet Wallet { get; set; }
         public DateTime BirthDate { get; set; }
         public string? Photo { get; set; }
         public int CurrentYear { get; set; }

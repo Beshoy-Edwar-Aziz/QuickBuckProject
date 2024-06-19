@@ -14,7 +14,7 @@ namespace QuickBuck.DTOs
         public string? WebSite { get; set; }
         public string? Logo { get; set; }
         public string? Description { get; set; }
-        public ICollection<Messages> Messages { get; set; } = new HashSet<Messages>();
+        public Wallet Wallet { get; set; }
 
     }
 }

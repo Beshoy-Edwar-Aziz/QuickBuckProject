@@ -20,6 +20,7 @@ namespace QuickBuck.Repository.Data
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
+            
         }
         public DbSet<Bookmark> Bookmarks { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }

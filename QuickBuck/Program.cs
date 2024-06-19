@@ -5,6 +5,7 @@ using QuickBuck.Extensions;
 using QuickBuck.Helpers;
 using QuickBuck.Repository;
 using QuickBuck.Repository.Data;
+using QuickBuck.Service;
 using System.Text.Json.Serialization;
 
 namespace QuickBuck
@@ -23,6 +24,7 @@ namespace QuickBuck
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<QuickBuckContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+            builder.Services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
             builder.Services.AddAutoMapper(typeof(MappingProfiles));
             builder.Services.IdentitServices(builder.Configuration);
             builder.Services.AddCors(options =>
