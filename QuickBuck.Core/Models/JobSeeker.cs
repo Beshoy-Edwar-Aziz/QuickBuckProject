@@ -30,6 +30,7 @@ namespace QuickBuck.Core.Models
         public int CurrentYear { get; set; }
         
         public string Status { get; set; }
+        public bool Premium { get; set; } = false;
         public List<Skills> Skills { get; set; } 
 
         public Wallet Wallet { get; set; }

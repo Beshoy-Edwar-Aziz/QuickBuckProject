@@ -9,6 +9,7 @@ namespace QuickBuck.DTOs
         public string UserLName { get; set; }
         public string UserName { get; set; }
         public Address Address { get; set; }
+        public bool Premium { get; set; }
         public string University { get; set; }
         public string College { get; set; }
         public Wallet Wallet { get; set; }

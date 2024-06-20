@@ -42,5 +42,22 @@ namespace QuickBuck.Controllers
             
             return Ok(MappedProviders);
         }
+        [HttpPut("UpdatePremium")]
+        public async Task<ActionResult<JobProviderToReturnDTO>> UpdateProviderPremium([FromQuery] int JobProviderId, [FromQuery] bool status)
+        {
+            var Spec = new JobProviderWithIncludesAndCriteria(JobProviderId,null);
+            var Provider = await _providerRepo.GetWithSpecByIdAsync(Spec);
+            if (Provider is not null) 
+            {
+                Provider.Premium= status;
+                await _providerRepo.Update(Provider);
+            }
+            else
+            {
+                return BadRequest(new ApiResponse(400,"ProviderId is invalid"));
+            }
+            var Mapped = _mapper.Map<JobProvider,JobProviderToReturnDTO>(Provider);
+            return Ok(Mapped);
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace QuickBuck.DTOs
         public int Id { get; set; }
         public string CompanyName { get; set; }
         public string Location { get; set; }
-
+        public bool Premium { get; set; }
         public string CompanySize { get; set; }
         public int NoOfEmployees { get; set; } = 0;
         public string Category { get; set; }

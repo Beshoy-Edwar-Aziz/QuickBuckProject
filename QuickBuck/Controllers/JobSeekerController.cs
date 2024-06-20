@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuickBuck.Core.Models;
 using QuickBuck.Core.Repositories;
 using QuickBuck.DTOs;
+using QuickBuck.Errors;
 using QuickBuck.Helpers;
 using QuickBuck.Repository.Specifications;
 
@@ -66,6 +67,23 @@ namespace QuickBuck.Controllers
             JobSeeker.College = Model.College;
             await _jobSeekerRepo.Update(JobSeeker);
             return Ok(Model);
+        }
+        [HttpPut("UpdatePremium")]
+        public async Task<ActionResult<JobSeekerToReturnDTO>> updatejobseekerstatus([FromQuery]int JobSeekerId,[FromQuery] bool status)
+        {
+            var Spec = new JobSeekerSpecWithIncludeAndCriteria(JobSeekerId);
+            var Seeker = await _jobSeekerRepo.GetWithSpecByIdAsync(Spec);
+            if (Seeker is not null)
+            {
+                Seeker.Premium = status;
+                await _jobSeekerRepo.Update(Seeker);
+            }
+            else
+            {
+                return BadRequest(new ApiResponse(400,"JobSeekerId is invalid"));
+            }
+            var Mapped = _mapper.Map<JobSeeker, JobSeekerToReturnDTO>(Seeker);
+            return Ok(Mapped);
         }
     }
 }

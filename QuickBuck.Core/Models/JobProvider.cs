@@ -11,7 +11,7 @@ namespace QuickBuck.Core.Models
         
         public string CompanyName { get; set; }
         public string Location { get; set; }
-        
+        public bool Premium { get; set; } = false;
         public string CompanySize { get; set; }
         public int NoOfEmployees { get; set; }
         public string Category { get; set; }
