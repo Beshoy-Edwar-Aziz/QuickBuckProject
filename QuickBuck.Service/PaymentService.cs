@@ -30,7 +30,7 @@ namespace QuickBuck.Service
             {
                 var Options = new PaymentIntentCreateOptions()
                 {
-                    Amount = (long)Balance+10000,
+                    Amount = (long)Balance*100,
                     Currency= "usd",
                     PaymentMethodTypes= new List<string>() {"card"}
                 };
@@ -42,7 +42,7 @@ namespace QuickBuck.Service
             {
                 var Options = new PaymentIntentUpdateOptions()
                 {
-                    Amount = (long)Balance+10000
+                    Amount = (long)Balance*100
                 };
                 paymentIntent = await Service.UpdateAsync(Wallet.PaymentIntentId, Options);
                 Wallet.PaymentIntentId = paymentIntent.Id;

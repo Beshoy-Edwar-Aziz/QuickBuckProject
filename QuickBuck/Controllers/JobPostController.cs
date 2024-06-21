@@ -8,6 +8,7 @@ using QuickBuck.DTOs;
 using QuickBuck.Errors;
 using QuickBuck.Helpers;
 using QuickBuck.Repository.Specifications;
+using System.Net;
 
 namespace QuickBuck.Controllers
 {
@@ -84,6 +85,41 @@ namespace QuickBuck.Controllers
                 return BadRequest(new ApiResponse(400,"Something Went Wrong"));
             }
             return Ok(JobPost);
+        }
+        [HttpPut]
+        public async Task<ActionResult<JobPostToReturnDTO>> UpdateJobPost([FromQuery] int JobPostId,JobPostDTO Model)
+        {
+            var Spec = new JobPostWithIncludesAndCriteria(JobPostId);
+            var JobPost = await _jobPostRepo.GetWithSpecByIdAsync(Spec);
+            if (JobPost is not null)
+            {
+                JobPost.Location = Model.Location;
+                JobPost.RequiredSkills = Model.RequiredSkills;
+                JobPost.Type = Model.Type;
+                JobPost.Content = Model.Content;
+                JobPost.Description = Model.Description;
+                JobPost.Email = Model.Email;
+                JobPost.Requirements = Model.Requirements;
+                JobPost.SalaryRangeFrom = Model.SalaryRangeFrom;
+                JobPost.SalaryRangeTo = Model.SalaryRangeTo;   
+                JobPost.Title = Model.Title;
+                await _jobPostRepo.Update(JobPost);
+                var Mapped = _mapper.Map<JobPost, JobPostToReturnDTO>(JobPost);
+                return Ok(Mapped);
+            }
+            return BadRequest(new ApiResponse(400,"Job Post is Not Available"));
+        }
+        [HttpDelete]
+        public async Task<ActionResult<JobPost>> DeleteJobPost([FromQuery] int JobPostId)
+        {
+            var Spec = new JobPostWithIncludesAndCriteria(JobPostId);
+            var Post = await _jobPostRepo.GetWithSpecByIdAsync(Spec);
+            if (Post is not null)
+            {
+                await _jobPostRepo.Delete(Post);
+                return Ok(Post);
+            }
+            return BadRequest(new ApiResponse(400,"Job Post Id is invalid"));
         }
     }
 }

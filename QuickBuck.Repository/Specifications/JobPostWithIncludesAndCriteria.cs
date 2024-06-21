@@ -20,7 +20,10 @@ namespace QuickBuck.Repository.Specifications
             Includes.Add(JP => JP.Requirements);
         }
         public JobPostWithIncludesAndCriteria(JobPostParams Params):base(jb=>
-        (string.IsNullOrEmpty(Params.JobName)||(jb.Title.Contains(Params.JobName))))
+        (string.IsNullOrEmpty(Params.JobName)||(jb.Title.Contains(Params.JobName)))
+        &&
+        (Params.JobProviderId==0)||(jb.jobProvider.Id==Params.JobProviderId)
+        )
         {
             ApplyPagination(Params.pageSize * (Params.PageIndex - 1), Params.pageSize);
             Includes.Add(JP => JP.jobProvider);

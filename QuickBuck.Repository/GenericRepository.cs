@@ -25,6 +25,12 @@ namespace QuickBuck.Repository
             return await _dbContext.SaveChangesAsync();
         }
 
+        public async Task Delete(T Item)
+        {
+            _dbContext.Remove(Item);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<IReadOnlyList<T>> GetAllWithAsync()
         {
             if (typeof(T) == typeof(JobSeeker))
