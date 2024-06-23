@@ -140,7 +140,7 @@ namespace QuickBuck.Controllers
             }
             else
             {
-                return BadRequest(new ApiResponse(400));
+                return BadRequest(new ApiResponse(400,"User Email Exists Enter Another Email"));
             }
         }
         [HttpPost("Login")]

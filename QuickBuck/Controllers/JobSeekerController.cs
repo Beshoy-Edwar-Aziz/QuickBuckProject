@@ -28,13 +28,13 @@ namespace QuickBuck.Controllers
         }
         [HttpGet]
         //[Authorize(Roles ="JobSeeker")]
-        public async Task<ActionResult<JobSeekerToReturnDTO>> GetAllJobSeekers()
-        {
-            var Spec = new JobSeekerSpecWithIncludeAndCriteria();
-            var Seekers = await _jobSeekerRepo.GetAllWithSpecAsync(Spec);
-            var MappedSeekers = _mapper.Map<IReadOnlyList<JobSeeker>, IReadOnlyList<JobSeekerToReturnDTO>>(Seekers);
-            return Ok(MappedSeekers);
-        }
+        //public async Task<ActionResult<JobSeekerToReturnDTO>> GetAllJobSeekers()
+        //{
+        //    var Spec = new JobSeekerSpecWithIncludeAndCriteria();
+        //    var Seekers = await _jobSeekerRepo.GetAllWithSpecAsync(Spec);
+        //    var MappedSeekers = _mapper.Map<IReadOnlyList<JobSeeker>, IReadOnlyList<JobSeekerToReturnDTO>>(Seekers);
+        //    return Ok(MappedSeekers);
+        //}
         [HttpGet("{id}")]
         public async Task<ActionResult<JobSeekerToReturnDTO>> GetJobSeekerById(int id)
         {
@@ -50,6 +50,18 @@ namespace QuickBuck.Controllers
             var Seeker = await _jobSeekerRepo.GetWithSpecByIdAsync(Spec);
             var MappedSeeker = _mapper.Map<JobSeeker, JobSeekerToReturnDTO>(Seeker);
             return Ok(MappedSeeker);
+        }
+        [HttpGet("SearchCandidates")]
+        public async Task<ActionResult<JobSeekerToReturnDTO>> SearchCandidates([FromQuery] JobSeekerParams Params)
+        {
+            var Spec = new JobSeekerSpecWithIncludeAndCriteria(Params);
+            var Seekers = await _jobSeekerRepo.GetAllWithSpecAsync(Spec);
+            if (Seekers is not null)
+            {
+                var Mapped = _mapper.Map<IReadOnlyList<JobSeeker>, IReadOnlyList<JobSeekerToReturnDTO>>(Seekers);
+                return Ok(Mapped);
+            }
+            return BadRequest(new ApiResponse(400,"Seeker is invalid"));
         }
         [HttpPut]
         public async Task<ActionResult<JobSeekerToReturnDTO>> UpdateJobSeekerData (JobSeekerDTO Model)

@@ -10,7 +10,8 @@ namespace QuickBuck.Repository.Specifications
 {
     public class JobSeekerSpecWithIncludeAndCriteria:BaseSpecification<JobSeeker>
     {
-        public JobSeekerSpecWithIncludeAndCriteria()
+        public JobSeekerSpecWithIncludeAndCriteria(JobSeekerParams Params):base(S=>
+        (string.IsNullOrEmpty(Params.UserName))||(S.AppUser.UserName.Contains(Params.UserName)))
         {
             Includes.Add(J => J.AppUser);
             Includes.Add(J=>J.AppUser.Address);

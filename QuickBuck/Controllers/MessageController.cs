@@ -37,7 +37,7 @@ namespace QuickBuck.Controllers
             return Ok(MappedMsg);
         }
         [HttpGet("GetPrevious")]
-        public async Task<ActionResult<MessageToReturnDTO>> GetMessagesByJobSeekerId([FromQuery] int? JobSeekerId, [FromQuery] int? JobProviderId)
+        public async Task<ActionResult<MessageToReturnDTO>> GetMessagesByJobSeekerId([FromQuery] int? JobSeekerId=0, [FromQuery] int? JobProviderId = 0)
         {
             var Spec = new MessagesWithIncludesAndCriteria(JobProviderId,JobSeekerId);
             var Messages = await _MessagesRepo.GetAllWithSpecAsync(Spec);
