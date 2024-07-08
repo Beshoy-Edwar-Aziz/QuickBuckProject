@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuickBuck.Core.Models;
@@ -9,7 +10,7 @@ using QuickBuck.Repository.Specifications;
 
 namespace QuickBuck.Controllers
 {
-   
+    [EnableCors("MyPolicy")]
     public class JobProviderController : ApiBaseController
     {
         private readonly IGenericRepository<JobProvider> _providerRepo;

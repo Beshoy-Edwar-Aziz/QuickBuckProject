@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using QuickBuck.Core.Repositories;
 using QuickBuck.Extensions;
 using QuickBuck.Helpers;
+using QuickBuck.MiddleWares;
 using QuickBuck.Repository;
 using QuickBuck.Repository.Data;
 using QuickBuck.Service;
@@ -27,17 +28,14 @@ namespace QuickBuck
             builder.Services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
             builder.Services.AddAutoMapper(typeof(MappingProfiles));
             builder.Services.IdentitServices(builder.Configuration);
-            builder.Services.AddCors(options =>
+            builder.Services.AddCors(o => o.AddPolicy("MyPolicy", policy =>
             {
-                options.AddDefaultPolicy(policy =>
-                {
-                    policy
-                            .AllowAnyHeader()
-                            .AllowCredentials()
-                            .AllowAnyMethod()
-                            .WithOrigins("http://localhost:4200");
-                });
-            });
+
+                policy.WithOrigins("https://beshoy-edwar-aziz.github.io")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+            }));
+           
             builder.Services.AddSignalR();
             builder.Services.AddControllers()
         .AddJsonOptions(options =>
@@ -70,9 +68,9 @@ namespace QuickBuck
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCors();
-            app.UseAuthentication();
             app.UseRouting();
+            app.UseCors("MyPolicy");
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
