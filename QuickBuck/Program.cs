@@ -75,7 +75,7 @@ namespace QuickBuck
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCors("FreeHostingPolicy");
+            app.UseCors();
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
