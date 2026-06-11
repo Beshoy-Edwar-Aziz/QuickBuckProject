@@ -14,7 +14,7 @@ using System.Net;
 namespace QuickBuck.Controllers
 {
     [Route("api/[controller]")]
-    [EnableCors("MyPolicy")]
+    [DisableCors]
     [ApiController]
     public class JobPostController : ControllerBase
     {

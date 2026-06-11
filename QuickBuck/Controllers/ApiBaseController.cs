@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace QuickBuck.Controllers
 {
     [Route("api/[controller]")]
-    [EnableCors("MyPolicy")]
+    [DisableCors]
     [ApiController]
     public class ApiBaseController : ControllerBase
     {

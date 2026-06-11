@@ -14,7 +14,7 @@ using System.Text.Json;
 namespace QuickBuck.Controllers
 {
     [Route("api/[controller]")]
-    [EnableCors("MyPolicy")]
+    [DisableCors]
     [ApiController]
     public class AccountController : ControllerBase
     {

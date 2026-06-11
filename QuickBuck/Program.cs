@@ -1,12 +1,13 @@
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using QuickBuck.Core.Repositories;
 using QuickBuck.Extensions;
 using QuickBuck.Helpers;
-using QuickBuck.MiddleWares;
 using QuickBuck.Repository;
 using QuickBuck.Repository.Data;
 using QuickBuck.Service;
+using Stripe;
 using System.Text.Json.Serialization;
 
 namespace QuickBuck
@@ -16,6 +17,7 @@ namespace QuickBuck
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
             // Add services to the container.
 
@@ -28,20 +30,26 @@ namespace QuickBuck
             builder.Services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
             builder.Services.AddAutoMapper(typeof(MappingProfiles));
             builder.Services.IdentitServices(builder.Configuration);
-            builder.Services.AddCors(o => o.AddPolicy("MyPolicy", policy =>
+            builder.Services.AddCors(options =>
             {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy
+                            .AllowAnyHeader()
+                            .AllowCredentials()
+                            .AllowAnyMethod()
+                            .WithOrigins("http://localhost:4200/#");
+                });
+            });
 
-                policy.WithOrigins("https://beshoy-edwar-aziz.github.io")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-            }));
-           
             builder.Services.AddSignalR();
             builder.Services.AddControllers()
         .AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         });
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+            builder.WebHost.UseUrls($"http://*:{port}");
             var app = builder.Build();
             #region UpdateDatabase
             using var Scope = app.Services.CreateScope();
@@ -65,15 +73,13 @@ namespace QuickBuck
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseRouting();
-            app.UseCors("MyPolicy");
+            app.UseCors("FreeHostingPolicy");
             app.UseAuthentication();
+            app.UseRouting();
             app.UseAuthorization();
-
-
+            
             app.UseEndpoints((endpoints) =>
             {
                 endpoints.MapControllers();
