@@ -38,7 +38,7 @@ namespace QuickBuck
                             .AllowAnyHeader()
                             .AllowCredentials()
                             .AllowAnyMethod()
-                            .WithOrigins("http://localhost:4200/#");
+                            .AllowAnyOrigin();
                 });
             });
 
@@ -75,9 +75,9 @@ namespace QuickBuck
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseRouting();
             app.UseCors();
             app.UseAuthentication();
-            app.UseRouting();
             app.UseAuthorization();
             
             app.UseEndpoints((endpoints) =>
