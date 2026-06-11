@@ -38,7 +38,7 @@ namespace QuickBuck
                             .AllowAnyHeader()
                             .AllowCredentials()
                             .AllowAnyMethod()
-                            .WithOrigins("https://quickbuck2.vercel.app/#");
+                            .WithOrigins("https://quickbuck2.vercel.app");
                 });
             });
 
