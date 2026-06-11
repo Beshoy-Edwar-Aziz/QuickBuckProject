@@ -38,7 +38,7 @@ namespace QuickBuck
                             .AllowAnyHeader()
                             .AllowCredentials()
                             .AllowAnyMethod()
-                            .WithOrigins("https://beshoy-edwar-aziz.github.io/QuickBuckFront/");
+                            .WithOrigins("https://quickbuck2.vercel.app/#");
                 });
             });
 
