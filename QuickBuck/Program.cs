@@ -24,8 +24,9 @@ namespace QuickBuck
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+            
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<QuickBuckContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<QuickBuckContext>(options=>options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             builder.Services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
             builder.Services.AddAutoMapper(typeof(MappingProfiles));
@@ -51,6 +52,11 @@ namespace QuickBuck
             var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
             builder.WebHost.UseUrls($"http://*:{port}");
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<QuickBuckContext>();
+                db.Database.Migrate();
+            }
             #region UpdateDatabase
             using var Scope = app.Services.CreateScope();
             var Services = Scope.ServiceProvider;
