@@ -10,7 +10,7 @@ using QuickBuck.Repository.Specifications;
 
 namespace QuickBuck.Controllers
 {
-    [DisableCors]
+    
     public class JobProviderController : ApiBaseController
     {
         private readonly IGenericRepository<JobProvider> _providerRepo;
