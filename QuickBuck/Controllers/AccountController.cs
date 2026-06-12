@@ -53,7 +53,7 @@ namespace QuickBuck.Controllers
                     Address = Model.Address
                 };
                 
-                if (Model.Role == "JobProvider")
+                if (Model.Role == "JobProvider" && User!=null)
                 {
                     var Role = new IdentityRole()
                     {
@@ -95,7 +95,7 @@ namespace QuickBuck.Controllers
                         Token = await _tokenService.CreateTokenAsync(User,_userManager)
                     });;
                 }
-                else if (Model.Role=="JobSeeker")
+                else if (Model.Role=="JobSeeker" && User!=null)
                 {
                    var Role= new IdentityRole()
                     {
@@ -148,7 +148,7 @@ namespace QuickBuck.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO Model)
         {
-            if (Model is not null)
+            if (Model is not null && User is not null)
             {
                 var User=await _userManager.FindByEmailAsync(Model.Email);
                 
