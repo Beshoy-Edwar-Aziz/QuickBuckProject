@@ -1,10 +1,13 @@
 ﻿namespace QuickBuck.Helpers
 {
+    using CloudinaryDotNet;
+    using CloudinaryDotNet.Actions;
+
     public static class DocumentSettings
     {
         public static string UploadFile(byte[] File,string Type ,string FolderName)
         {
-            string FolderPath = ""; 
+        /*    string FolderPath = ""; 
             string FileName = "";
             if (Type=="image") {
                 FolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Images", FolderName); 
@@ -18,8 +21,21 @@
             string CompleteFilePath = Path.Combine(FolderPath,FileName);
             using var Fs = new FileStream(CompleteFilePath,FileMode.Create);
             Fs.Write(File, 0, File.Length);
-            return FileName;
-
+            return FileName;*/
+            var cloudinary = new Cloudinary(new Account(
+           Environment.GetEnvironmentVariable("Cloudinary__CloudName"),
+           Environment.GetEnvironmentVariable("Cloudinary__ApiKey"),
+           Environment.GetEnvironmentVariable("Cloudinary__ApiSecret")
+       ));
+            using var stream = new MemoryStream(File);
+            var uploadParams = new ImageUploadParams()
+            {
+                File = new FileDescription("upload", stream),
+                Folder = FolderName
+                
+            };
+            var uploadResult = cloudinary.Upload(uploadParams);
+            return uploadResult.SecureUrl.ToString();
         } 
         public static void DeleteFile(string FileName,string FolderName, string FileType)
         {
