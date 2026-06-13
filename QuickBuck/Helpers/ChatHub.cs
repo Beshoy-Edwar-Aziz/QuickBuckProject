@@ -23,19 +23,25 @@ namespace QuickBuck.Helpers
             _providerRepo = ProviderRepo;
             _messageRepo = MessageRepo;
         }
-        
+        public async Task JoinConversation(int JobSeekerId , int JobProviderId)
+        {
+            string groupName = GetGroupName(JobSeekerId, JobProviderId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+        }
+        public async Task LeaveConversation (int JobSeekerId, int JobProviderId)
+        {
+            string groupName = GetGroupName(JobSeekerId, JobProviderId);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+        }
         public async Task Send(int JobSeekerId,int JobProviderId,string Context, string Role,string Name)
         {
             var SpecJobSeeker = new JobSeekerSpecWithIncludeAndCriteria(JobSeekerId);
             var JobSeeker = await _seekerRepo.GetWithSpecByIdAsync(SpecJobSeeker);
             var SpecJobProvider = new JobProviderWithIncludesAndCriteria(JobProviderId,null);
             var JobProvider = await _providerRepo.GetWithSpecByIdAsync(SpecJobProvider);
-            if (Role=="JobSeeker") {
-                await Clients.All.SendAsync("RecieveMessage", JobSeeker.AppUser.UserName, Context);
-            }else if (Role=="JobProvider")
-            {
-                await Clients.All.SendAsync("RecieveMessage", JobProvider.CompanyName, Context);
-            }
+            string groupName = GetGroupName(JobSeekerId , JobProviderId);   
+            string senderName = Role == "JobSeeker" ? JobSeeker.AppUser.UserName : JobProvider.AppUser.UserName;
+            await Clients.Group(groupName).SendAsync("RecieveMessage", senderName, Context);
             var random = new Random();
             var Message = new Messages()
             {
@@ -55,6 +61,10 @@ namespace QuickBuck.Helpers
             {
                await _context.SaveChangesAsync();
             }
+        }
+        private static string GetGroupName (int JobSeekerId,int JobProviderId)
+        {
+            return $"Conversation {Math.Min(JobSeekerId,JobProviderId)}_{Math.Max(JobSeekerId,JobProviderId)}";
         }
         
     }
