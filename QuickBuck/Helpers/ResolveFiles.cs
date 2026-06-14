@@ -16,7 +16,8 @@ namespace QuickBuck.Helpers
         {
             if (!string.IsNullOrEmpty(source.CV))
             {
-                return $"{_configuration["ApiBaseUrl"]}Files/{source.CV}";
+                /* return $"{_configuration["ApiBaseUrl"]}Files/{source.CV}";*/
+                return $"{source.CV}";
             }
             return string.Empty;
         }

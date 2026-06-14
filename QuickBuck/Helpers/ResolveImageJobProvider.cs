@@ -16,7 +16,8 @@ namespace QuickBuck.Helpers
         {
             if (!string.IsNullOrEmpty(source.Logo))
             {
-                return $"{_configuration["ApiBaseUrl"]}/images/photos/{source.Logo}";
+                /*return $"{_configuration["ApiBaseUrl"]}/images/photos/{source.Logo}";*/
+                return $"{source.Logo}";
             }
             return string.Empty;
         }
