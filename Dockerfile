@@ -1,5 +1,9 @@
-# 1. Build Stage (.NET 6 SDK)
-FROM ://microsoft.com AS build
+# Explicitly define the base images using ARGs to prevent registry parsing errors
+ARG SDK_IMAGE=://microsoft.com
+ARG RUNTIME_IMAGE=://microsoft.com
+
+# 1. Build Stage
+FROM ${SDK_IMAGE} AS build
 WORKDIR /src
 
 # Copy the solution file and all .csproj files to restore dependencies
@@ -19,13 +23,18 @@ COPY . .
 WORKDIR "/src/QuickBuck"
 RUN dotnet publish -c Release -o /app/out
 
-# 2. Runtime Stage (.NET 6 ASP.NET Core Runtime)
-FROM ://microsoft.com
+# 2. Runtime Stage
+FROM ${RUNTIME_IMAGE}
 WORKDIR /app
 COPY --from=build /app/out ./
 
 # Inform Railway of the port (.NET 6 defaults to port 80)
 EXPOSE 80
+ENV ASPNETCORE_URLS=http://+:80
+
+# Run the API
+ENTRYPOINT ["dotnet", "QuickBuck.dll"]
+
 ENV ASPNETCORE_URLS=http://+:80
 
 # Run the API (Assuming 'QuickBuck.dll' is your main API output)
