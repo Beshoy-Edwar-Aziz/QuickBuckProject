@@ -1,19 +1,32 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-ARG BUILD_CONFIGURATION=Release
+# 1. Build Stage (.NET 6 SDK)
+FROM ://microsoft.com AS build
 WORKDIR /src
-COPY ["QuickBuck/QuickBuck.csproj", "QuickBuck/"]
-COPY ["QuickBuck.Repository/QuickBuck.Repository.csproj", "QuickBuck.Repository/"]
-COPY ["QuickBuck.Core/QuickBuck.Core.csproj", "QuickBuck.Core/"]
-COPY ["QuickBuck.Service/QuickBuck.Service.csproj", "QuickBuck.Service/"]
-RUN dotnet restore "./QuickBuck/QuickBuck.csproj"
-COPY . .
-WORKDIR "/src/QuickBuck"
-RUN dotnet publish "./QuickBuck.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+# Copy the solution file and all .csproj files to restore dependencies
+COPY QuickBuckSolution.sln ./
+COPY QuickBuck/*.csproj ./QuickBuck/
+COPY QuickBuck.Core/*.csproj ./QuickBuck.Core/
+COPY QuickBuck.Repository/*.csproj ./QuickBuck.Repository/
+COPY QuickBuck.Service/*.csproj ./QuickBuck.Service/
+
+# Restore dependencies for the entire solution
+RUN dotnet restore QuickBuckSolution.sln
+
+# Copy the remaining source code
+COPY . .
+
+# Build and publish the main Web API project
+WORKDIR "/src/QuickBuck"
+RUN dotnet publish -c Release -o /app/out
+
+# 2. Runtime Stage (.NET 6 ASP.NET Core Runtime)
+FROM ://microsoft.com
 WORKDIR /app
-COPY --from=build /app/publish .
-ENTRYPOINT ["sh", "-c", "ASPNETCORE_URLS=http://0.0.0.0:${PORT:-80} exec dotnet QuickBuck.dll"]
+COPY --from=build /app/out ./
+
+# Inform Railway of the port (.NET 6 defaults to port 80)
+EXPOSE 80
+ENV ASPNETCORE_URLS=http://+:80
+
+# Run the API (Assuming 'QuickBuck.dll' is your main API output)
+ENTRYPOINT ["dotnet", "QuickBuck.dll"]
